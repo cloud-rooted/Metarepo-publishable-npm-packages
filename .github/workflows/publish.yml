@@ -43,7 +43,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build the metabuild-components library
-        run: pnpm nx build metabuild-components
+        run: pnpm nx build @metabuild/components
 
       - name: Verify build output
         run: ls -la dist/packages/metabuild-components
