@@ -45,9 +45,6 @@ jobs:
       - name: Build the metabuild-components library
         run: pnpm nx build @metabuild/components
 
-      - name: Verify build output
-        run: ls -la dist/packages/metabuild-components
-
       - name: Publish to npm
         run: |
           cd dist/packages/metabuild-components
