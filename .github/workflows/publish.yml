@@ -1,0 +1,56 @@
+name: Publish Metabuild Components to NPM
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # allows manual trigger (manual publish)
+
+jobs:
+  publish:
+    name: Publish @metabuild/components to npm
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ensures Nx affected commands & version tags work
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Cache PNPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the metabuild-components library
+        run: pnpm nx build metabuild-components
+
+      - name: Verify build output
+        run: ls -la dist/packages/metabuild-components
+
+      - name: Publish to npm
+        run: |
+          cd dist/packages/metabuild-components
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

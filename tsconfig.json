@@ -11,6 +11,9 @@
     },
     {
       "path": "./packages/api-endpoints"
+    },
+    {
+      "path": "./packages/metabuild-components"
     }
   ]
 }
