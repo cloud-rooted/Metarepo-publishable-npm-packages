@@ -47,7 +47,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          cd dist/packages/metabuild-components
+          cd packages/dist/packages/metabuild-components
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
